@@ -14,6 +14,8 @@ print(len(eqdata['features']))
 
 list_of_eqs = eqdata['features']
 
+mags, lats, lons, hover_texts = [], [], [], []
+
 mags = []
 lats = []
 lons = []
@@ -25,13 +27,29 @@ for eq in list_of_eqs:
     lats.append(lat)
     lon = eq['geometry']['coordinates'][0]
     lons.append(lon)
+    title = eq['properties']['title']
+    hover_texts.append(title)
 
 print(mags[:5])
 print(lats[:5])
 print(lons[:5])
 
 
-data = [Scattergeo(lon=lons, lat=lats)]
+#data = [Scattergeo(lon=lons, lat=lats)]
+
+data = [{
+    'type': 'scattergeo',
+    'lon': lons,
+    'lat': lats,
+    'text': hover_texts,
+    'marker': {
+        'size': [5*m for m in mags],
+        'color':mags,
+        'colorscale':'Viridis',
+        'reversescale':True,
+        'colorbar':{'title': 'Magnitude'}
+    }
+}]
 
 my_layout = Layout(title='Global Eathquakes 1 Day')
 
